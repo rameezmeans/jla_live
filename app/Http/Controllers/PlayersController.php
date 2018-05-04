@@ -91,11 +91,25 @@ class PlayersController extends Controller
             $player->allowed = $request->all()['allowed'];
             $player->saved = $request->all()['saved'];
 
-            $player->points = $player['goals'] + $player['assists'];
-            $player->shots_percentage = ($player['goals'] / $player['shots']) * 100;
-            $player->sog_percentage = ($player['sog'] / $player['shots']) * 100;
-            $player->FO_percentage = ($player['win'] / ( $player['win'] + $player['lose'] )) * 100;
-            $player->save_percentage = ($player['saved'] / ( $player['allowed'] + $player['saved'] )) * 100;
+            if($player['shots'] != 0)
+                $player->shots_percentage = ($player['goals'] / $player['shots']) * 100;
+            else
+                $player->shots_percentage = 0;
+
+            if($player['shots'] != 0)
+                $player->sog_percentage = ($player['sog'] / $player['shots']) * 100;
+            else
+                $player->sog_percentage = 0;
+
+            if($player['win'] + $player['lose'] != 0)
+                $player->FO_percentage = ($player['win'] / ( $player['win'] + $player['lose'] )) * 100;
+            else
+                $player->FO_percentage = 0;
+
+            if($player['allowed'] + $player['saved'] )
+                $player->save_percentage = ($player['saved'] / ( $player['allowed'] + $player['saved'] )) * 100;
+            else
+                $player->save_percentage = 0;
 
             $player->save();
 
@@ -168,11 +182,25 @@ class PlayersController extends Controller
             $player->allowed = $request->all()['allowed'];
             $player->saved = $request->all()['saved'];
 
-            $player->points = $player['goals'] + $player['assists'];
-            $player->shots_percentage = ($player['goals'] / $player['shots']) * 100;
-            $player->sog_percentage = ($player['sog'] / $player['shots']) * 100;
-            $player->FO_percentage = ($player['win'] / ( $player['win'] + $player['lose'] )) * 100;
-            $player->save_percentage = ($player['saved'] / ( $player['allowed'] + $player['saved'] )) * 100;
+            if($player['shots'] != 0)
+                $player->shots_percentage = ($player['goals'] / $player['shots']) * 100;
+            else
+                $player->shots_percentage = 0;
+
+            if($player['shots'] != 0)
+                $player->sog_percentage = ($player['sog'] / $player['shots']) * 100;
+            else
+                $player->sog_percentage = 0;
+
+            if($player['win'] + $player['lose'] != 0)
+                $player->FO_percentage = ($player['win'] / ( $player['win'] + $player['lose'] )) * 100;
+            else
+                $player->FO_percentage = 0;
+
+            if($player['allowed'] + $player['saved'] )
+                $player->save_percentage = ($player['saved'] / ( $player['allowed'] + $player['saved'] )) * 100;
+            else
+                $player->save_percentage = 0;
 
             $player->save();
             $player->team_name = Team::findOrFail($request->team_id)->name;

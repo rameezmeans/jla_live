@@ -100,11 +100,25 @@ class TeamsController extends Controller
             $team->allowed = $request->all()['allowed'];
             $team->saved = $request->all()['saved'];
 
-            $team->points = $team['goals'] + $team['assists'];
-            $team->shots_percentage = ($team['goals'] / $team['shots']) * 100;
-            $team->sog_percentage = ($team['sog'] / $team['shots']) * 100;
-            $team->FO_percentage = ($team['win'] / ( $team['win'] + $team['lose'] )) * 100;
-            $team->save_percentage = ($team['saved'] / ( $team['allowed'] + $team['saved'] )) * 100;
+            if($team['shots'] != 0)
+                $team->shots_percentage = ($team['goals'] / $team['shots']) * 100;
+            else
+                $team->shots_percentage = 0;
+
+            if($team['shots'] != 0)
+                $team->sog_percentage = ($team['sog'] / $team['shots']) * 100;
+            else
+                $team->sog_percentage = 0;
+
+            if($team['win'] + $team['lose'] != 0)
+                $team->FO_percentage = ($team['win'] / ( $team['win'] + $team['lose'] )) * 100;
+            else
+                $team->FO_percentage = 0;
+
+            if($team['allowed'] + $team['saved'] )
+                $team->save_percentage = ($team['saved'] / ( $team['allowed'] + $team['saved'] )) * 100;
+            else
+                $team->save_percentage = 0;
 
 //            dd($team);
 
@@ -178,10 +192,26 @@ class TeamsController extends Controller
             $team->saved = $request->all()['saved'];
 
             $team->points = $team['goals'] + $team['assists'];
-            $team->shots_percentage = ($team['goals'] / $team['shots']) * 100;
-            $team->sog_percentage = ($team['sog'] / $team['shots']) * 100;
-            $team->FO_percentage = ($team['win'] / ( $team['win'] + $team['lose'] )) * 100;
-            $team->save_percentage = ($team['saved'] / ( $team['allowed'] + $team['saved'] )) * 100;
+
+            if($team['shots'] != 0)
+                $team->shots_percentage = ($team['goals'] / $team['shots']) * 100;
+            else
+                $team->shots_percentage = 0;
+
+            if($team['shots'] != 0)
+                $team->sog_percentage = ($team['sog'] / $team['shots']) * 100;
+            else
+                $team->sog_percentage = 0;
+
+            if($team['win'] + $team['lose'] != 0)
+                $team->FO_percentage = ($team['win'] / ( $team['win'] + $team['lose'] )) * 100;
+            else
+                $team->FO_percentage = 0;
+
+            if($team['allowed'] + $team['saved'] )
+                $team->save_percentage = ($team['saved'] / ( $team['allowed'] + $team['saved'] )) * 100;
+            else
+                $team->save_percentage = 0;
 
 
 //            dd($team);
