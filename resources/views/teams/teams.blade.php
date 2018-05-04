@@ -104,7 +104,7 @@
     <div class="col-md-12">
         <div class="row">
             <div class="col-md-12">
-                <h2 class="text-center">Teams</h2>
+                <h2 class="text-center">Teams Check</h2>
             </div>
         </div>
         @if($admin)
