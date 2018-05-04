@@ -43,7 +43,7 @@ class GameRecordsController extends Controller
         }
 
 
-        return view('gamerecords.index', ['admin' => $admin, 'gamerecords' => $gamerecords, 'games' => $games, 'teams' => $teams, 'opponents' => $opponents, 'players' => $players]);
+        return view('gamerecords.gamerecords', ['admin' => $admin, 'gamerecords' => $gamerecords, 'games' => $games, 'teams' => $teams, 'opponents' => $opponents, 'players' => $players]);
     }
 
 

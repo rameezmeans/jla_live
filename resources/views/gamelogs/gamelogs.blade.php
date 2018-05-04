@@ -13,7 +13,7 @@
     <!-- CSFR token for ajax call -->
     <meta name="_token" content="{{ csrf_token() }}"/>
 
-    <title>Game Schedual</title>
+    <title>Game Schedule</title>
     
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -105,6 +105,7 @@
         <div class="row">
             <div class="col-md-12"><h2 class="text-center">Game Schedule</h2></div>
         </div>
+
         @if($admin)
         <div class="row">
             <div class="col-md-12 text-center"><a href="#" class="add-modal">Add a Game Stat</a></div>
@@ -148,7 +149,7 @@
                                         <a href="{{ URL('').'/team/'.$gamelog->opponent_id }}">{{\App\Team::findOrFail($gamelog->opponent_id)->name}}</a>
                                     </td>
                                     <td>
-                                        {{$gamelog->score}}
+                                        <a href="{{ URL('').'/gamerecords' }}">{{$gamelog->score}}</a>
                                     </td>
                                     <td>
                                         {{$gamelog->venue}}

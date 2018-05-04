@@ -16,18 +16,46 @@ class CreatGameRecordsTable extends Migration
         Schema::create('game_records', function(Blueprint $table)
         {
             $table->increments('id');
-            $table->integer('gp');
-            $table->integer('gb');
-            $table->integer('shots');
-            $table->integer('spct');
-            $table->integer('sog');
-            $table->decimal('sogpct');
-            $table->integer('fo');
-            $table->decimal('fopct');
-            $table->integer('player_id');
+//            $table->integer('gp');
+//            $table->integer('gb');
+//            $table->integer('shots');
+//            $table->integer('spct');
+//            $table->integer('sog');
+//            $table->decimal('sogpct');
+//            $table->integer('fo');
+//            $table->decimal('fopct');
+//            $table->integer('player_id');
+//            $table->integer('game_id');
+//            $table->integer('team_id');
+//            $table->integer('opponent_id');
+
             $table->integer('game_id');
             $table->integer('team_id');
-            $table->integer('opponent_id');
+            $table->integer('player_id');
+            $table->integer('minutes');
+            $table->boolean('starter');
+            $table->boolean('home');
+
+            $table->integer('goals');
+            $table->integer('assists');
+            $table->integer('points');
+            $table->integer('shots');
+            $table->decimal('shots_percentage');
+            $table->integer('sog');
+            $table->decimal('sog_percentage');
+            $table->integer('manup');
+            $table->integer('down');
+            $table->integer('ground_ball');
+            $table->integer('TO');
+            $table->integer('CTO');
+            $table->integer('win');
+            $table->integer('lose');
+            $table->decimal('FO_percentage');
+            $table->integer('allowed');
+            $table->integer('saved');
+            $table->decimal('save_percentage');
+
+
             $table->boolean('is_published')->default(false);
             $table->timestamps();
         });
