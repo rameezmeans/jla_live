@@ -112,7 +112,10 @@
         <table class="table table-striped table-hover" id="postTable" style="visibility: hidden;">
             <thead>
             <tr>
-                <th class="end">Team</th>
+                <th>Team</th>
+                <th > </th>
+                <th > </th>
+                <th class="end"> </th>
                 <th>Offense</th>
                 <th> </th>
                 <th class="end"> </th>
@@ -137,7 +140,10 @@
                 {{--@endif--}}
             </tr>
             <tr>
-                <th class="end">Name</th>
+                <th>Team</th>
+                <th>Name</th>
+                <th>Number</th>
+                <th class="end">Position</th>
                 <th>Goal</th>
                 <th>Assist</th>
                 <th class="end">Points</th>
@@ -165,7 +171,10 @@
             </thead>
             <tbody>
                 <tr class="item{{$player->id}} @if($player->is_published) warning @endif">
+                    <td><a href="{{ URL('').'/team/'.$player->team_id }}">{{ \App\Team::findOrFail( $player->team_id )->name }}</a></td>
                     <td>{{$player->name}}</td>
+                    <td>{{$player->number}}</td>
+                    <td>{{$player->position}}</td>
                     <td>{{ $player->goals }}</td>
                     <td>{{ $player->assists }}</td>
                     <td class="end">{{ $player->points }}</td>

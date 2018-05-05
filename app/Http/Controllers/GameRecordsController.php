@@ -53,9 +53,21 @@ class GameRecordsController extends Controller
 
         $gamerecords = GameRecords::where('gamelog_id', $id)->get();
 
+        $goals = array();
 
-        $all_players = Player::where('players.team_id', $gamelog->team_id)->orWhere('players.team_id', $gamelog->opponent_id)->get();
-        $existing_players = Player::where('players.team_id', $gamelog->team_id)->join('game_records', 'players.id', '=', 'game_records.player_id')->orWhere('players.team_id', $gamelog->opponent_id)->Where('game_records.gamelog_id', $id)->get();
+        $home = GameRecords::where('team_id', $gamelog->team_id)->where('gamelog_id', $id)->sum('goals');
+        $away = GameRecords::where('team_id', $gamelog->opponent_id)->where('gamelog_id', $id)->sum('goals');
+
+//        dd($away);
+
+        $goals = ['home' => $home, 'away' => $away];
+
+
+        $all_players = Player::where('team_id', $gamelog->team_id)->orWhere('team_id', $gamelog->opponent_id)->get();
+
+//        dd($all_players);
+
+        $existing_players = Player::join('game_records', 'players.id', '=', 'game_records.player_id')->Where('game_records.gamelog_id', $id)->get();
 
         $existing_players_ids_array = array();
 
@@ -75,17 +87,6 @@ class GameRecordsController extends Controller
             }
         }
 
-//        dd($players);
-
-
-
-
-//        foreach($all_players as $p){
-//
-//            if()
-//        }
-
-
         if($user = Auth::user())
         {
             if($user->id == 1){
@@ -93,7 +94,7 @@ class GameRecordsController extends Controller
             }
         }
 
-        return view('gamerecords.gamerecord', ['gamerecords' => $gamerecords, 'all_players' => $all_players, 'admin' => $admin, 'players' => $players, 'gamelog' => $gamelog]);
+        return view('gamerecords.gamerecord', ['goals' => $goals, 'gamerecords' => $gamerecords, 'all_players' => $all_players, 'admin' => $admin, 'players' => $players, 'gamelog' => $gamelog]);
 
 
     }
@@ -134,8 +135,6 @@ class GameRecordsController extends Controller
 
 //        dd( $gamerecord->position );
 
-
-
             $gamerecord->gamelog_id = $request->gamelog_id;
 
             $gamelog = GameLogs::findOrFail( $request->gamelog_id );
@@ -155,10 +154,6 @@ class GameRecordsController extends Controller
                 $gamerecord->starter = 1;
             else
                 $gamerecord->starter = 0;
-
-
-
-
 
             $gamerecord->goals = $request->all()['goals'];
             $gamerecord->assists = $request->all()['assists'];

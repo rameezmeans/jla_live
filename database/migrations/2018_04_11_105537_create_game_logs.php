@@ -21,7 +21,6 @@ class CreateGameLogs extends Migration
             $table->integer('opponent_id');
             $table->date('date_played');
             $table->string('venue');
-            $table->string('score');
             $table->boolean('is_published')->default(false);
             $table->timestamps();
         });

@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\GameRecords;
 use App\Team;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -31,6 +32,13 @@ class GameLogsController extends Controller
         $games = Game::orderBy('id', 'desc')->get();
         $teams = Team::orderBy('id', 'desc')->get();
         $opponents = Team::orderBy('id', 'desc')->get();
+
+        foreach($gamelogs as $g){
+            $g->home = GameRecords::where('gamelog_id', $g->id)->where('team_id', $g->team_id)->sum('goals');
+            $g->away = GameRecords::where('gamelog_id', $g->id)->where('team_id', $g->opponent_id)->sum('goals');
+        }
+
+//        dd($gamelogs);
 
         $admin = false;
 
@@ -78,7 +86,6 @@ class GameLogsController extends Controller
             $gamelog->opponent_id = $request->opponent_id;
             $gamelog->date_played = Carbon::createFromFormat('m/d/Y', $request->date_played);
             $gamelog->venue = $request->venue;
-            $gamelog->score = $request->score;
             $gamelog->save();
 
             $gamelog->team_name = Team::findOrFail($request->team_id)->name;
@@ -134,6 +141,8 @@ class GameLogsController extends Controller
             $gamelog->game_id = $request->game_id;
             $gamelog->team_id = $request->team_id;
             $gamelog->opponent_id = $request->opponent_id;
+            $gamelog->date_played = Carbon::createFromFormat('m/d/Y', $request->date_played);
+            $gamelog->venue = $request->venue;
             $gamelog->save();
             return response()->json($gamelog);
         }

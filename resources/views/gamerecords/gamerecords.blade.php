@@ -40,7 +40,9 @@
 
 
 </head>
-
+<?php
+    $admin = 0;
+?>
 <body>
 <nav class="navbar navbar-default navbar-static-top bg-dark">
     <div class="container">
@@ -107,14 +109,14 @@
             <h2 class="text-center">Game Details</h2>
         </div>
     </div>
-    <div class="row"><div class="col-md-12"><h4 class="text-center">Date: Sun May 06, 2018</h4></div></div>
-    <div class="row"><div class="col-md-12"><h4 class="text-center">Home: <a href="{{ URL('team')."/1" }}">FC Barcelona</a></h4></div></div>
-    <div class="row"><div class="col-md-12"><h4 class="text-center">Away: <a href="{{ URL('team')."/2" }}">Real Madrid</a></h4></div></div>
-    <div class="row"><div class="col-md-12"><h4 class="text-center">Score: 3-1</h4></div></div>
-    <div class="row"><div class="col-md-12"><h4 class="text-center">Venue: Camp Nou</h4></div></div>
+    {{--<div class="row"><div class="col-md-12"><h4 class="text-center">Date: Sun May 06, 2018</h4></div></div>--}}
+    {{--<div class="row"><div class="col-md-12"><h4 class="text-center">Home: <a href="{{ URL('team')."/1" }}">FC Barcelona</a></h4></div></div>--}}
+    {{--<div class="row"><div class="col-md-12"><h4 class="text-center">Away: <a href="{{ URL('team')."/2" }}">Real Madrid</a></h4></div></div>--}}
+    {{--<div class="row"><div class="col-md-12"><h4 class="text-center">Score: 3-1</h4></div></div>--}}
+    {{--<div class="row"><div class="col-md-12"><h4 class="text-center">Venue: Camp Nou</h4></div></div>--}}
     @if($admin)
         <div class="row">
-            <div class="col-md-12 text-center"><a href="#" class="add-modal">Add a Game Record</a></div>
+            {{--<div class="col-md-12 text-center"><a href="#" class="add-modal">Add a Game Record</a></div>--}}
         </div>
     @endif
     <br />

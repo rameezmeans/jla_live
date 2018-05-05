@@ -102,7 +102,7 @@
     </div>
 </nav>
 
-<div class="col-md-12">
+<div class="col-md-8 col-md-offset-2">
     <div class="row">
         <div class="col-md-12">
             <h2 class="text-center">Players</h2>
@@ -115,63 +115,17 @@
     @endif
     <br />
 
-<div class="col-md-9">
+<div class="col-md-12">
 
     <table class="table table-striped table-hover" id="postTable" style="max-width: 100%;">
         <thead>
-        <tr>
-            <th class="end"></th>
-            <th >Team</th>
-            <th> </th>
-            <th> </th>
-            <th class="end"> </th>
-            <th>Offense</th>
-            <th> </th>
-            <th class="end"> </th>
-            <th>Shots</th>
-            <th> </th>
-            <th> </th>
-            <th> </th>
-            <th> </th>
-            <th class="end"> </th>
-            <th>Transition </th>
-            <th> </th>
-            <th class="end"> </th>
-            <th>Faceoff</th>
-            <th> </th>
-            <th class="end"> </th>
-            <th>Goalie</th>
-            <th> </th>
-            <th class="end"> </th>
-            @if($admin)
-                <th> </th>
-                <th> </th>
-            @endif
-        </tr>
+
         <tr>
             <th class="end">#</th>
             <th>Name</th>
             <th>Team</th>
             <th>position</th>
             <th class="end">Number</th>
-            <th>Goal</th>
-            <th>Assist</th>
-            <th class="end">Points</th>
-            <th>Shots</th>
-            <th>Shot%</th>
-            <th>SOG</th>
-            <th>SOG%</th>
-            <th>Manup</th>
-            <th class="end">Down</th>
-            <th>GroundBall</th>
-            <th>TO</th>
-            <th class="end">CTO</th>
-            <th>Win</th>
-            <th>Lose</th>
-            <th class="end">FO%</th>
-            <th>Allowed</th>
-            <th>Saved</th>
-            <th class="end">Save%</th>
             @if($admin)
                 <th>Last updated</th>
                 <th>Actions</th>
@@ -187,24 +141,7 @@
                 <td><a href="{{ URL('').'/team/'.$player->team_id }}">{{ \App\Team::findOrFail($player->team_id)->name}}</a></td>
                 <td>{{$player->position}}</td>
                 <td>{{$player->number}}</td>
-                <td>{{ $player->goals }}</td>
-                <td>{{ $player->assists }}</td>
-                <td class="end">{{ $player->points }}</td>
-                <td>{{ $player->shots }}</td>
-                <td>{{ $player->shots_percentage }}</td>
-                <td>{{ $player->sog }}</td>
-                <td>{{ $player->sog_percentage }}</td>
-                <td>{{ $player->manup }}</td>
-                <td class="end">{{ $player->down }}</td>
-                <td>{{ $player->ground_ball }}</td>
-                <td>{{ $player->TO }}</td>
-                <td class="end">{{ $player->CTO }}</td>
-                <td>{{ $player->win }}</td>
-                <td>{{ $player->lose }}</td>
-                <td class="end">{{ $player->FO_percentage }}</td>
-                <td>{{ $player->allowed }}</td>
-                <td>{{ $player->saved }}</td>
-                <td>{{ $player->save_percentage }}</td>
+
                 @if($admin)
                     <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $player->updated_at)->diffForHumans() }}</td>
                     <td style="display: inline-flex;">
@@ -289,110 +226,6 @@
                         <label class="control-label col-sm-2" for="name">Position:</label>
                         <div class="col-sm-10">
                             <input type="text" min="0" class="form-control" id="position_add" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">Goals:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="goals_add" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">Assists:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="assists_add" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">Shots:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="shots_add" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">SOG:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="sog_add" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">Manup:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="manup_add" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">Down:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="down_add" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">Ground Ball:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="ground_ball_add" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">TO:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="TO_add" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">CTO:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="CTO_add" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">Win:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="win_add" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">Lose:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="lose_add" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">Allowed:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="allowed_add" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">Saved:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="saved_add" >
                             <small>Only numbers greater than 0. </small>
                             <p class="errorGoals text-center alert alert-danger hidden"></p>
                         </div>
@@ -491,110 +324,6 @@
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="position_edit" autofocus>
                             <p class="errorName text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">Goals:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="goals_edit" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">Assists:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="assists_edit" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">Shots:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="shots_edit" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">SOG:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="sog_edit" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">Manup:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="manup_edit" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">Down:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="down_edit" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">Ground Ball:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="ground_ball_edit" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">TO:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="TO_edit" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">CTO:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="CTO_edit" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">Win:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="win_edit" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">Lose:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="lose_edit" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">Allowed:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="allowed_edit" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">Saved:</label>
-                        <div class="col-sm-10">
-                            <input type="number" min="0" value="0" class="form-control" id="saved_edit" >
-                            <small>Only numbers greater than 0. </small>
-                            <p class="errorGoals text-center alert alert-danger hidden"></p>
                         </div>
                     </div>
                 </form>
@@ -730,6 +459,7 @@
                 'number': $('#number_add').val()
             },
             success: function(data) {
+                location.reload();
                 $('.errorName').addClass('hidden');
                 $('.errorContent').addClass('hidden');
 
@@ -755,24 +485,7 @@
                     "<td>" + data.team_name + "</td>" +
                     "<td>" + data.number + "</td>" +
                     "<td>" + data.position + "</td>" +
-                    "<td>" + data.goals + "</td>" +
-                    "<td>" + data.assists + "</td>" +
-                    "<td>" + data.points + "</td>" +
-                    "<td>" + data.shots + "</td>" +
-                    "<td>" + data.shots_percentage + "</td>" +
-                    "<td>" + data.sog + "</td>" +
-                    "<td>" + data.sog_percentage + "</td>" +
-                    "<td>" + data.manup + "</td>" +
-                    "<td>" + data.down + "</td>" +
-                    "<td>" + data.ground_ball + "</td>" +
-                    "<td>" + data.TO + "</td>" +
-                    "<td>" + data.CTO + "</td>" +
-                    "<td>" + data.win + "</td>" +
-                    "<td>" + data.lose + "</td>" +
-                    "<td>" + data.FO_percentage + "</td>" +
-                    "<td>" + data.allowed + "</td>" +
-                    "<td>" + data.saved + "</td>" +
-                    "<td>" + data.save_percentage + "</td>" +
+
 
 
                     "<td>Just now!</td>" +
@@ -904,6 +617,7 @@
                 'number': $('#number_edit').val()
             },
             success: function(data) {
+                location.reload();
                 $('.errorName').addClass('hidden');
 
                 if ((data.errors)) {
@@ -923,24 +637,7 @@
                     "<td>" + data.team_name + "</td>" +
                     "<td>" + data.number + "</td>" +
                     "<td>" + data.position + "</td>" +
-                    "<td>" + data.goals + "</td>" +
-                    "<td>" + data.assists + "</td>" +
-                    "<td>" + data.points + "</td>" +
-                    "<td>" + data.shots + "</td>" +
-                    "<td>" + data.shots_percentage + "</td>" +
-                    "<td>" + data.sog + "</td>" +
-                    "<td>" + data.sog_percentage + "</td>" +
-                    "<td>" + data.manup + "</td>" +
-                    "<td>" + data.down + "</td>" +
-                    "<td>" + data.ground_ball + "</td>" +
-                    "<td>" + data.TO + "</td>" +
-                    "<td>" + data.CTO + "</td>" +
-                    "<td>" + data.win + "</td>" +
-                    "<td>" + data.lose + "</td>" +
-                    "<td>" + data.FO_percentage + "</td>" +
-                    "<td>" + data.allowed + "</td>" +
-                    "<td>" + data.saved + "</td>" +
-                    "<td>" + data.save_percentage + "</td>" +
+
 
 
                     "<td>Right now</td><td><button class='show-modal btn btn-success' " +

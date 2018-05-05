@@ -110,7 +110,7 @@
     <div class="row"><div class="col-md-12"><h4 class="text-center">Date: {{  \Carbon\Carbon::parse( $gamelog->date_played )->format('D M d, Y') }}</h4></div></div>
     <div class="row"><div class="col-md-12"><h4 class="text-center">Home: <a href="{{ URL('team')."/". $gamelog->team_id }}">{{ \App\Team::findorFail($gamelog->team_id)->name }}</a></h4></div></div>
     <div class="row"><div class="col-md-12"><h4 class="text-center">Away: <a href="{{ URL('team')."/". $gamelog->opponent_id }}">{{ \App\Team::findorFail($gamelog->opponent_id)->name }}</a></h4></div></div>
-    <div class="row"><div class="col-md-12"><h4 class="text-center">Score: 3-1</h4></div></div>
+    <div class="row"><div class="col-md-12"><h4 class="text-center">Score: {{ $goals['home'] }}-{{ $goals['away'] }}</h4></div></div>
     <div class="row"><div class="col-md-12"><h4 class="text-center">Venue: Camp Nou</h4></div></div>
     @if($admin)
         <div class="row">

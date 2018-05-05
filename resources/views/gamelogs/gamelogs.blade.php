@@ -149,7 +149,7 @@
                                         <a href="{{ URL('').'/team/'.$gamelog->opponent_id }}">{{\App\Team::findOrFail($gamelog->opponent_id)->name}}</a>
                                     </td>
                                     <td>
-                                        <a href="{{ URL('').'/gamerecords' }}">{{$gamelog->score}}</a>
+                                        <a href="{{ URL('').'/gamerecord/'.$gamelog->id }}">{{ $gamelog->home }}-{{ $gamelog->away }}</a>
                                     </td>
                                     <td>
                                         {{$gamelog->venue}}
@@ -227,16 +227,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="content">Score:</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" id="score" name="score"  cols="40" rows="5" type="text">
-                                <p class="errorTeamID text-center alert alert-danger hidden"></p>
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label class="control-label col-sm-2" for="content">Venue:</label>
                             <div class="col-sm-10">
-                                <input class="form-control" id="venue" name="venue"  cols="40" rows="5" type="text">
+                                <input class="form-control" id="venue_add" name="venue"  cols="40" rows="5" type="text">
                                 <p class="errorTeamID text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -328,7 +321,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="content">Team:</label>
+                            <label class="control-label col-sm-2" for="content">Home:</label>
                             <div class="col-sm-10">
                                 {{--<textarea class="form-control" id="game_id_edit" cols="40" rows="5"></textarea>--}}
                                 <select class="form-control" id="team_id_edit" cols="40" rows="5">
@@ -340,7 +333,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="content">Opponent:</label>
+                            <label class="control-label col-sm-2" for="content">Away:</label>
                             <div class="col-sm-10">
                                 {{--<textarea class="form-control" id="game_id_edit" cols="40" rows="5"></textarea>--}}
                                 <select class="form-control" id="opponent_id_edit" cols="40" rows="5">
@@ -348,6 +341,13 @@
                                         <option value="{{ $opponent->id }}">{{ $opponent->name }}</option>
                                     @endforeach
                                 </select>
+                                <p class="errorTeamID text-center alert alert-danger hidden"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="content">Venue:</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" id="venue_edit" name="venue"  cols="40" rows="5" type="text">
                                 <p class="errorTeamID text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -447,10 +447,11 @@
                     'team_id': $('#team_id_add').val(),
                     'opponent_id': $('#opponent_id_add').val(),
                     'date_played': $('#date_played').val(),
-                    'score': $('#score').val(),
-                    'venue': $('#venue').val()
+                    'venue': $('#venue_add').val()
                 },
                 success: function(data) {
+                    location.reload();
+
                     $('.errorName').addClass('hidden');
                     $('.errorTeamID').addClass('hidden');
 
@@ -538,6 +539,7 @@
                     'opponent_id': $('#opponent_id_edit').val()
                 },
                 success: function(data) {
+                    location.reload();
                     $('.errorName').addClass('hidden');
                     $('.errorTeamID').addClass('hidden');
 
