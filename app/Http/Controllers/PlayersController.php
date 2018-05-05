@@ -165,19 +165,19 @@ class PlayersController extends Controller
         $player = Player::findOrFail($id);
 //        dd($player);
 
-        $player->goals = GameRecords::where('team_id', $id)->sum('goals');
-        $player->assists = GameRecords::where('team_id', $id)->sum('assists');
-        $player->shots = GameRecords::where('team_id', $id)->sum('shots');
-        $player->sog = GameRecords::where('team_id', $id)->sum('sog');
-        $player->manup = GameRecords::where('team_id', $id)->sum('manup');
-        $player->down = GameRecords::where('team_id', $id)->sum('down');
-        $player->ground_ball = GameRecords::where('team_id', $id)->sum('ground_ball');
-        $player->TO = GameRecords::where('team_id', $id)->sum('TO');
-        $player->CTO = GameRecords::where('team_id', $id)->sum('CTO');
-        $player->win = GameRecords::where('team_id', $id)->sum('win');
-        $player->lose = GameRecords::where('team_id', $id)->sum('lose');
-        $player->allowed = GameRecords::where('team_id', $id)->sum('allowed');
-        $player->saved = GameRecords::where('team_id', $id)->sum('saved');
+        $player->goals = GameRecords::where('player_id', $id)->sum('goals');
+        $player->assists = GameRecords::where('player_id', $id)->sum('assists');
+        $player->shots = GameRecords::where('player_id', $id)->sum('shots');
+        $player->sog = GameRecords::where('player_id', $id)->sum('sog');
+        $player->manup = GameRecords::where('player_id', $id)->sum('manup');
+        $player->down = GameRecords::where('player_id', $id)->sum('down');
+        $player->ground_ball = GameRecords::where('player_id', $id)->sum('ground_ball');
+        $player->TO = GameRecords::where('player_id', $id)->sum('TO');
+        $player->CTO = GameRecords::where('player_id', $id)->sum('CTO');
+        $player->win = GameRecords::where('player_id', $id)->sum('win');
+        $player->lose = GameRecords::where('player_id', $id)->sum('lose');
+        $player->allowed = GameRecords::where('player_id', $id)->sum('allowed');
+        $player->saved = GameRecords::where('player_id', $id)->sum('saved');
 
         $player->points = $player['goals'] + $player['assists'];
 
