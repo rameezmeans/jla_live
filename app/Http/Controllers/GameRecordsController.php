@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\GameLogs;
 use App\GameRecords;
 use App\Player;
 use App\Team;
@@ -46,6 +47,29 @@ class GameRecordsController extends Controller
         return view('gamerecords.gamerecords', ['admin' => $admin, 'gamerecords' => $gamerecords, 'games' => $games, 'teams' => $teams, 'opponents' => $opponents, 'players' => $players]);
     }
 
+    public function showGameRecord($id){
+
+        $gamelog = GameLogs::findOrFail($id);
+
+        $gamerecords = GameRecords::orderBy('id', 'desc')->get();
+
+
+        $players = Player::where('team_id', $gamelog->team_id)->orWhere('team_id', $gamelog->opponent_id)->get();
+
+//        dd($players);
+
+        if($user = Auth::user())
+        {
+            if($user->id == 1){
+                $admin = true;
+            }
+        }
+
+        return view('gamerecords.gamerecord', ['gamerecords' => $gamerecords, 'admin' => $admin, 'players' => $players, 'gamelog' => $gamelog]);
+
+
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -66,33 +90,95 @@ class GameRecordsController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make(Input::all(), $this->rules);
-        if ($validator->fails()) {
-            return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
-        } else {
+
+//            dd($request->all());
+
             $gamerecord = new GameRecords();
-            $gamerecord->gp = $request->gp;
-            $gamerecord->gb = $request->gb;
-            $gamerecord->shots = $request->shots;
-            $gamerecord->spct = $request->spct;
-            $gamerecord->sog = $request->sog;
-            $gamerecord->sogpct = $request->sogpct;
-            $gamerecord->fo = $request->fo;
-            $gamerecord->fopct = $request->fopct;
             $gamerecord->player_id = $request->player_id;
-            $gamerecord->game_id = $request->game_id;
-            $gamerecord->team_id = $request->team_id;
-            $gamerecord->opponent_id = $request->opponent_id;
+
+            $gamerecord->team_id = Player::FindOrFail($request->player_id)->team_id;
+            $gamerecord->position = Player::FindOrFail($request->player_id)->position;
+
+
+            $gamerecord->number = Player::FindOrFail($request->player_id)->number;
+
+            $team_id = Player::FindOrFail($request->player_id)->team_id;
+
+//        dd( $gamerecord->position );
+
+
+
+            $gamerecord->gamelog_id = $request->gamelog_id;
+
+            $gamelog = GameLogs::findOrFail( $request->gamelog_id );
+
+
+
+            if($team_id == $gamelog->team_id){
+                $gamerecord->home = 1;
+            }
+            else if($team_id == $gamelog->opponent_id){
+                $gamerecord->home = 0;
+            }
+
+            $gamerecord->minutes = $request->minutes;
+
+            if($request->starter == 'on')
+                $gamerecord->starter = 1;
+            else
+                $gamerecord->starter = 0;
+
+
+
+
+
+            $gamerecord->goals = $request->all()['goals'];
+            $gamerecord->assists = $request->all()['assists'];
+            $gamerecord->shots = $request->all()['shots'];
+            $gamerecord->sog = $request->all()['sog'];
+            $gamerecord->manup = $request->all()['manup'];
+            $gamerecord->down = $request->all()['down'];
+            $gamerecord->ground_ball = $request->all()['ground_ball'];
+            $gamerecord->TO = $request->all()['TO'];
+            $gamerecord->CTO = $request->all()['CTO'];
+            $gamerecord->win = $request->all()['win'];
+            $gamerecord->lose = $request->all()['lose'];
+            $gamerecord->allowed = $request->all()['allowed'];
+            $gamerecord->saved = $request->all()['saved'];
+
+            $gamerecord->points = $gamerecord['goals'] + $gamerecord['assists'];
+
+            if($gamerecord['shots'] != 0)
+                $gamerecord->shots_percentage = ($gamerecord['goals'] / $gamerecord['shots']) * 100;
+            else
+                $gamerecord->shots_percentage = 0;
+
+            if($gamerecord['shots'] != 0)
+                $gamerecord->sog_percentage = ($gamerecord['sog'] / $gamerecord['shots']) * 100;
+            else
+                $gamerecord->sog_percentage = 0;
+
+            if($gamerecord['win'] + $gamerecord['lose'] != 0)
+                $gamerecord->FO_percentage = ($gamerecord['win'] / ( $gamerecord['win'] + $gamerecord['lose'] )) * 100;
+            else
+                $gamerecord->FO_percentage = 0;
+
+            if($gamerecord['allowed'] + $gamerecord['saved'] )
+                $gamerecord->save_percentage = ($gamerecord['saved'] / ( $gamerecord['allowed'] + $gamerecord['saved'] )) * 100;
+            else
+                $gamerecord->save_percentage = 0;
+
+//        dd($gamerecord);
+
+
             $gamerecord->save();
 
             $gamerecord->player_name = Player::findOrFail($request->player_id)->name;
-            $gamerecord->team_name = Team::findOrFail($request->team_id)->name;
-            $gamerecord->game_name = Game::findOrFail($request->game_id)->name;
-            $gamerecord->opponent_name = Team::findOrFail($request->opponent_id)->name;
+            $gamerecord->team_name = Team::findOrFail($team_id)->name;
 
 
             return response()->json($gamerecord);
-        }
+
     }
 
 
@@ -131,32 +217,92 @@ class GameRecordsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validator = Validator::make(Input::all(), $this->rules);
-        if ($validator->fails()) {
-            return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
-        } else {
-            $gamerecord = GameRecords::findOrFail($id);
-            $gamerecord->gp = $request->gp;
-            $gamerecord->gb = $request->gb;
-            $gamerecord->shots = $request->shots;
-            $gamerecord->spct = $request->spct;
-            $gamerecord->sog = $request->sog;
-            $gamerecord->sogpct = $request->sogpct;
-            $gamerecord->fo = $request->fo;
-            $gamerecord->fopct = $request->fopct;
-            $gamerecord->player_id = $request->player_id;
-            $gamerecord->game_id = $request->game_id;
-            $gamerecord->team_id = $request->team_id;
-            $gamerecord->opponent_id = $request->opponent_id;
-            $gamerecord->save();
+        $gamerecord = new GameRecords();
+        $gamerecord->player_id = $request->player_id;
 
-            $gamerecord->player_name = Player::findOrFail($request->player_id)->name;
-            $gamerecord->team_name = Team::findOrFail($request->team_id)->name;
-            $gamerecord->game_name = Game::findOrFail($request->game_id)->name;
-            $gamerecord->opponent_name = Team::findOrFail($request->opponent_id)->name;
+        $gamerecord->team_id = Player::FindOrFail($request->player_id)->team_id;
+        $gamerecord->position = Player::FindOrFail($request->player_id)->position;
 
-            return response()->json($gamerecord);
+
+        $gamerecord->number = Player::FindOrFail($request->player_id)->number;
+
+        $team_id = Player::FindOrFail($request->player_id)->team_id;
+
+//        dd( $gamerecord->position );
+
+
+
+        $gamerecord->gamelog_id = $request->gamelog_id;
+
+        $gamelog = GameLogs::findOrFail( $request->gamelog_id );
+
+
+
+        if($team_id == $gamelog->team_id){
+            $gamerecord->home = 1;
         }
+        else if($team_id == $gamelog->opponent_id){
+            $gamerecord->home = 0;
+        }
+
+        $gamerecord->minutes = $request->minutes;
+
+        if($request->starter == 'on')
+            $gamerecord->starter = 1;
+        else
+            $gamerecord->starter = 0;
+
+
+
+
+
+        $gamerecord->goals = $request->all()['goals'];
+        $gamerecord->assists = $request->all()['assists'];
+        $gamerecord->shots = $request->all()['shots'];
+        $gamerecord->sog = $request->all()['sog'];
+        $gamerecord->manup = $request->all()['manup'];
+        $gamerecord->down = $request->all()['down'];
+        $gamerecord->ground_ball = $request->all()['ground_ball'];
+        $gamerecord->TO = $request->all()['TO'];
+        $gamerecord->CTO = $request->all()['CTO'];
+        $gamerecord->win = $request->all()['win'];
+        $gamerecord->lose = $request->all()['lose'];
+        $gamerecord->allowed = $request->all()['allowed'];
+        $gamerecord->saved = $request->all()['saved'];
+
+        $gamerecord->points = $gamerecord['goals'] + $gamerecord['assists'];
+
+        if($gamerecord['shots'] != 0)
+            $gamerecord->shots_percentage = ($gamerecord['goals'] / $gamerecord['shots']) * 100;
+        else
+            $gamerecord->shots_percentage = 0;
+
+        if($gamerecord['shots'] != 0)
+            $gamerecord->sog_percentage = ($gamerecord['sog'] / $gamerecord['shots']) * 100;
+        else
+            $gamerecord->sog_percentage = 0;
+
+        if($gamerecord['win'] + $gamerecord['lose'] != 0)
+            $gamerecord->FO_percentage = ($gamerecord['win'] / ( $gamerecord['win'] + $gamerecord['lose'] )) * 100;
+        else
+            $gamerecord->FO_percentage = 0;
+
+        if($gamerecord['allowed'] + $gamerecord['saved'] )
+            $gamerecord->save_percentage = ($gamerecord['saved'] / ( $gamerecord['allowed'] + $gamerecord['saved'] )) * 100;
+        else
+            $gamerecord->save_percentage = 0;
+
+//        dd($gamerecord);
+
+
+        $gamerecord->save();
+
+        $gamerecord->player_name = Player::findOrFail($request->player_id)->name;
+        $gamerecord->team_name = Team::findOrFail($team_id)->name;
+
+
+        return response()->json($gamerecord);
+
     }
 
 

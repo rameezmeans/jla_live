@@ -14,6 +14,7 @@
 Route::get('/', 'GameLogsController@index');
 Route::get('/team/{id}', 'TeamsController@showTeam');
 Route::get('/player/{id}', 'PlayersController@showPlayer');
+Route::get('/gamerecord/{id}', 'GameRecordsController@showGameRecord');
 
 Route::resource('posts','PostsController');
 Route::resource('games','GamesController');

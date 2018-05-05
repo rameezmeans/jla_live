@@ -16,24 +16,13 @@ class CreatGameRecordsTable extends Migration
         Schema::create('game_records', function(Blueprint $table)
         {
             $table->increments('id');
-//            $table->integer('gp');
-//            $table->integer('gb');
-//            $table->integer('shots');
-//            $table->integer('spct');
-//            $table->integer('sog');
-//            $table->decimal('sogpct');
-//            $table->integer('fo');
-//            $table->decimal('fopct');
-//            $table->integer('player_id');
-//            $table->integer('game_id');
-//            $table->integer('team_id');
-//            $table->integer('opponent_id');
-
-            $table->integer('game_id');
             $table->integer('team_id');
+            $table->integer('gamelog_id');
             $table->integer('player_id');
             $table->integer('minutes');
             $table->boolean('starter');
+            $table->integer('number');
+            $table->string('position');
             $table->boolean('home');
 
             $table->integer('goals');

@@ -5,8 +5,6 @@ use Illuminate\Database\Eloquent\Model;
 class GameRecords extends Model
 {
     protected $table = 'game_records';
-    protected $fillable = ['gp', 'gb', 'shots', 'spct', 'sog', 'sogpct', 'fo', 'fopct', 'game_id', 'team_id', 'opponent_id', 'is_published'];
-
 
     /**
 	 * Get excerpt from string

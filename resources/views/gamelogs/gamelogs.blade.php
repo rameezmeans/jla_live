@@ -157,8 +157,8 @@
                                     @if($admin)
                                         <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $gamelog->updated_at)->diffForHumans() }}</td>
                                         <td>
-                                            <button class="show-modal btn btn-success" data-id="{{$gamelog->id}}"  data-game_id="{{$gamelog->game_id}}" data-game_name="{{\App\Game::findOrFail($gamelog->game_id)->name}}" data-team_id="{{$gamelog->team_id}}" data-team_name="{{\App\Team::findOrFail($gamelog->team_id)->name}}" data-opponent_id="{{$gamelog->opponent_id}}" data-opponent_name="{{\App\Team::findOrFail($gamelog->opponent_id)->name}}">
-                                            <span class="glyphicon glyphicon-eye-open"></span> Show</button>
+                                            <a href="{{ URL('gamerecord').'/'.$gamelog->id }}" class="btn btn-success">
+                                            <span class="glyphicon glyphicon-eye-open"></span> Show </a></button>
                                             <button class="edit-modal btn btn-info" data-id="{{$gamelog->id}}"  data-game_id="{{$gamelog->game_id}}" data-game_name="{{\App\Game::findOrFail($gamelog->game_id)->name}}" data-team_id="{{$gamelog->team_id}}" data-team_name="{{\App\Team::findOrFail($gamelog->team_id)->name}}" data-opponent_id="{{$gamelog->opponent_id}}" data-opponent_name="{{\App\Team::findOrFail($gamelog->opponent_id)->name}}">
                                             <span class="glyphicon glyphicon-edit"></span> Edit</button>
                                             <button class="delete-modal btn btn-danger" data-id="{{$gamelog->id}}"  data-game_id="{{$gamelog->game_id}}" data-game_name="{{\App\Game::findOrFail($gamelog->game_id)->name}}" data-team_id="{{$gamelog->team_id}}" data-team_name="{{\App\Team::findOrFail($gamelog->team_id)->name}}" data-opponent_id="{{$gamelog->opponent_id}}" data-opponent_name="{{\App\Team::findOrFail($gamelog->opponent_id)->name}}">
