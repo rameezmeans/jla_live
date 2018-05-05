@@ -51,12 +51,40 @@ class GameRecordsController extends Controller
 
         $gamelog = GameLogs::findOrFail($id);
 
-        $gamerecords = GameRecords::orderBy('id', 'desc')->get();
+        $gamerecords = GameRecords::where('gamelog_id', $id)->get();
 
 
-        $players = Player::where('team_id', $gamelog->team_id)->orWhere('team_id', $gamelog->opponent_id)->get();
+        $all_players = Player::where('players.team_id', $gamelog->team_id)->orWhere('players.team_id', $gamelog->opponent_id)->get();
+        $existing_players = Player::where('players.team_id', $gamelog->team_id)->join('game_records', 'players.id', '=', 'game_records.player_id')->orWhere('players.team_id', $gamelog->opponent_id)->Where('game_records.gamelog_id', $id)->get();
+
+        $existing_players_ids_array = array();
+
+        foreach($existing_players as $e){
+
+            $existing_players_ids_array []= $e->player_id;
+        }
+
+//        dd($existing_players_ids_array);
+
+        $players = array();
+
+        foreach($all_players as $ap){
+
+            if(!in_array($ap->id, $existing_players_ids_array)){
+                $players []= $ap->toArray();
+            }
+        }
 
 //        dd($players);
+
+
+
+
+//        foreach($all_players as $p){
+//
+//            if()
+//        }
+
 
         if($user = Auth::user())
         {
@@ -65,7 +93,7 @@ class GameRecordsController extends Controller
             }
         }
 
-        return view('gamerecords.gamerecord', ['gamerecords' => $gamerecords, 'admin' => $admin, 'players' => $players, 'gamelog' => $gamelog]);
+        return view('gamerecords.gamerecord', ['gamerecords' => $gamerecords, 'all_players' => $all_players, 'admin' => $admin, 'players' => $players, 'gamelog' => $gamelog]);
 
 
     }
@@ -173,11 +201,11 @@ class GameRecordsController extends Controller
 
             $gamerecord->save();
 
-            $gamerecord->player_name = Player::findOrFail($request->player_id)->name;
-            $gamerecord->team_name = Team::findOrFail($team_id)->name;
+        $gamerecord->player_name = '<a href='.URL('').'/'.$request->player_id.'>'.Player::findOrFail($request->player_id)->name.'</a>';
+        $gamerecord->team_name = '<a href='.URL('').'/'.$team_id.'>'.Team::findOrFail($team_id)->name.'</a>';
 
 
-            return response()->json($gamerecord);
+        return response()->json($gamerecord);
 
     }
 
@@ -217,7 +245,9 @@ class GameRecordsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $gamerecord = new GameRecords();
+//        dd($request->all());
+
+        $gamerecord = GameRecords::findOrFail($id);
         $gamerecord->player_id = $request->player_id;
 
         $gamerecord->team_id = Player::FindOrFail($request->player_id)->team_id;
@@ -251,10 +281,6 @@ class GameRecordsController extends Controller
             $gamerecord->starter = 1;
         else
             $gamerecord->starter = 0;
-
-
-
-
 
         $gamerecord->goals = $request->all()['goals'];
         $gamerecord->assists = $request->all()['assists'];
@@ -297,9 +323,8 @@ class GameRecordsController extends Controller
 
         $gamerecord->save();
 
-        $gamerecord->player_name = Player::findOrFail($request->player_id)->name;
-        $gamerecord->team_name = Team::findOrFail($team_id)->name;
-
+        $gamerecord->player_name = '<a href='.URL('').'/'.$request->player_id.'>'.Player::findOrFail($request->player_id)->name.'</a>';
+        $gamerecord->team_name = '<a href='.URL('').'/'.$team_id.'>'.Team::findOrFail($team_id)->name.'</a>';
 
         return response()->json($gamerecord);
 

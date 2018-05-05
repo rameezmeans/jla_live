@@ -107,9 +107,9 @@
             <h2 class="text-center">Game Details</h2>
         </div>
     </div>
-    <div class="row"><div class="col-md-12"><h4 class="text-center">Date: Sun May 06, 2018</h4></div></div>
-    <div class="row"><div class="col-md-12"><h4 class="text-center">Home: <a href="{{ URL('team')."/1" }}">FC Barcelona</a></h4></div></div>
-    <div class="row"><div class="col-md-12"><h4 class="text-center">Away: <a href="{{ URL('team')."/2" }}">Real Madrid</a></h4></div></div>
+    <div class="row"><div class="col-md-12"><h4 class="text-center">Date: {{  \Carbon\Carbon::parse( $gamelog->date_played )->format('D M d, Y') }}</h4></div></div>
+    <div class="row"><div class="col-md-12"><h4 class="text-center">Home: <a href="{{ URL('team')."/". $gamelog->team_id }}">{{ \App\Team::findorFail($gamelog->team_id)->name }}</a></h4></div></div>
+    <div class="row"><div class="col-md-12"><h4 class="text-center">Away: <a href="{{ URL('team')."/". $gamelog->opponent_id }}">{{ \App\Team::findorFail($gamelog->opponent_id)->name }}</a></h4></div></div>
     <div class="row"><div class="col-md-12"><h4 class="text-center">Score: 3-1</h4></div></div>
     <div class="row"><div class="col-md-12"><h4 class="text-center">Venue: Camp Nou</h4></div></div>
     @if($admin)
@@ -215,15 +215,11 @@
                 @if($admin)
                     <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $gamerecord->updated_at)->diffForHumans() }}</td>
                     <td style="display: inline-flex;">
-                        <button class="show-modal btn btn-success"
-                                data-id="{{$gamerecord->id}}"
-                                data-name="{{$gamerecord->name}}"
-
-                                >
-                            <span  class="glyphicon glyphicon-eye-open"></span></button>
                         <button class="edit-modal btn btn-info"
                                 data-id="{{$gamerecord->id}}"
-                                data-name="{{$gamerecord->name}}"
+                                data-player_id="{{$gamerecord->player_id}}"
+                                data-starter="{{$gamerecord->starter}}"
+                                data-minutes="{{$gamerecord->minutes}}"
                                 data-goals="{{$gamerecord->goals}}"
                                 data-assists="{{$gamerecord->assists}}"
                                 data-shots="{{$gamerecord->shots}}"
@@ -267,7 +263,7 @@
                             {{--<input class="form-control"  cols="40" rows="5" type="number">--}}
                             <select class="form-control" id="player_id_add">
                                 @foreach($players as $player)
-                                    <option value="{{ $player->id }}">{{ $player->name }}</option>
+                                    <option value="{{ $player['id'] }}">{{ $player['name'] }}</option>
                                 @endforeach
                             </select>
                             <p class="errorTeamID text-center alert alert-danger hidden"></p>
@@ -276,7 +272,7 @@
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="name">Starter:</label>
                         <div class="col-sm-10">
-                            <input type="radio" checked class="form-control" id="starter_add">
+                            <input type="checkbox" checked class="form-control" id="starter_add">
                         </div>
                     </div>
                     <div class="form-group">
@@ -459,11 +455,25 @@
                         <div class="col-sm-10">
                             {{--<input class="form-control"  cols="40" rows="5" type="number">--}}
                             <select class="form-control" id="player_id_edit">
-                                @foreach($players as $player)
-                                    <option value="{{ $player->id }}">{{ $player->name }}</option>
+                                @foreach($all_players as $player)
+                                    <option value="{{ $player['id'] }}">{{ $player['name'] }}</option>
                                 @endforeach
                             </select>
                             <p class="errorTeamID text-center alert alert-danger hidden"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="name">Starter:</label>
+                        <div class="col-sm-10">
+                            <input type="checkbox" class="form-control" id="starter_edit">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="name">Minutes:</label>
+                        <div class="col-sm-10">
+                            <input type="number" min="1" value="1" class="form-control" id="minutes_edit" >
+                            <small>Only numbers greater than 0. </small>
+                            <p class="errorGoals text-center alert alert-danger hidden"></p>
                         </div>
                     </div>
                     <div class="form-group">
@@ -679,14 +689,35 @@
         $('#addModal').modal('show');
     });
     $('.modal-footer').on('click', '.add', function() {
-        $.ajax({
+
+        if ($('#starter_add').is(":checked")){
+
+            starter = 'on';
+
+        }
+        else{
+            starter = 'off';
+
+        }
+
+
+        player_id = $('#player_id_add').val();
+
+       if(player_id == null){
+           toastr.error('Cant Add Record with Empty Players!', 'Danger Alert', {timeOut: 5000});
+
+           return;
+
+       }
+
+            $.ajax({
             type: 'POST',
             url: '{{URL('')}}'+'/gamerecords',
             data: {
                 '_token': $('input[name=_token]').val(),
-                'player_id': $('#player_id_add').val(),
+                'player_id': player_id,
                 'gamelog_id': $('#gamelog_id_add').val(),
-                'starter': $('#starter_add').val(),
+                'starter': starter,
                 'number': $('#number_add').val(),
                 'minutes': $('#minutes_add').val(),
                 'goals': $('#goals_add').val(),
@@ -704,6 +735,9 @@
                 'saved': $('#saved_add').val()
             },
             success: function(data) {
+
+                location.reload();
+
                 $('.errorName').addClass('hidden');
                 $('.errorContent').addClass('hidden');
 
@@ -751,25 +785,12 @@
 
 
                     "<td>Just now!</td>" +
-                    "<td><button class='show-modal btn btn-success' data-id='" + data.id +
-                    "' data-name='" + data.name +
-                    "' data-goals='" + data.goals +
-                    "' data-assists='" + data.assists +
-                    "' data-shots='" + data.shots +
-                    "' data-sog='" + data.sog +
-                    "' data-ground_ball='" + data.ground_ball +
-                    "' data-manup='" + data.manup +
-                    "' data-down='" + data.down +
-                    "' data-to='" + data.TO +
-                    "' data-cto='" + data.CTO +
-                    "' data-win='" + data.win +
-                    "' data-lose='" + data.lose +
-                    "' data-allowed='" + data.allowed +
-                    "' data-saved='" + data.saved +
-                    "'><span class='glyphicon glyphicon-eye-open'></span> Show</button> <button class='edit-modal btn btn-info' " +
+                    "<td><button class='edit-modal btn btn-info' " +
                     "data-id='" + data.id +
-                    "' data-name='" + data.name +
-                    "' data-goals='" + data.goals +
+                    "' data-player_id='" + data.player_id +
+                    "' data-number='" + data.number +
+                    "' data-minutes='" + data.minutes +
+                    "' data-starter='" + data.starter +
                     "' data-assists='" + data.assists +
                     "' data-shots='" + data.shots +
                     "' data-sog='" + data.sog +
@@ -782,7 +803,7 @@
                     "' data-lose='" + data.lose +
                     "' data-allowed='" + data.allowed +
                     "' data-saved='" + data.saved +
-                    "' data-content='" + data.content + "'><span class='glyphicon glyphicon-edit'></span> Edit</button> <button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-name='" + data.name + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-trash'></span> Delete</button></td></tr>");
+                    "' data-content='" + data.content + "'><span class='glyphicon glyphicon-edit'></span></button> <button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-name='" + data.name + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
                     $('.new_published').iCheck({
                         checkboxClass: 'icheckbox_square-yellow',
                         radioClass: 'iradio_square-yellow',
@@ -827,7 +848,15 @@
     $(document).on('click', '.edit-modal', function() {
         $('.modal-name').text('Edit');
         $('#id_edit').val($(this).data('id'));
-        $('#name_edit').val($(this).data('name'));
+        $('#player_id_edit').val($(this).data('player_id'));
+
+        if($(this).data('starter') == 1){
+            $('#starter_edit').prop('checked', true);
+
+        }
+
+        $('#number_edit').val($(this).data('number'));
+        $('#minutes_edit').val($(this).data('minutes'));
         $('#goals_edit').val($(this).data('goals'));
         $('#assists_edit').val($(this).data('assists'));
         $('#shots_edit').val($(this).data('shots'));
@@ -845,13 +874,28 @@
         $('#editModal').modal('show');
     });
     $('.modal-footer').on('click', '.edit', function() {
+
+        if ($('#starter_edit').is(":checked")){
+
+            starter = 'on';
+
+        }
+        else{
+            starter = 'off';
+
+        }
+
         $.ajax({
             type: 'PUT',
-            url: 'gamerecords/' + id,
+            url: '{{ URL('') }}'+'/gamerecords/' + id,
             data: {
                 '_token': $('input[name=_token]').val(),
                 'id': $("#id_edit").val(),
-                'name': $('#name_edit').val(),
+                'player_id': $('#player_id_edit').val(),
+                'gamelog_id': $('#gamelog_id_add').val(),
+                'starter': starter,
+                'number': $('#number_edit').val(),
+                'minutes': $('#minutes_edit').val(),
                 'goals': $('#goals_edit').val(),
                 'assists': $('#assists_edit').val(),
                 'shots': $('#shots_edit').val(),
@@ -867,6 +911,7 @@
                 'saved': $('#saved_edit').val()
             },
             success: function(data) {
+                location.reload();
                 $('.errorName').addClass('hidden');
 
                 if ((data.errors)) {
@@ -882,7 +927,11 @@
                 } else {
                     toastr.success('Successfully updated Team!', 'Success Alert', {timeOut: 5000});
                     $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='col1'>" + data.id + "</td>" +
-                    "<td>" + data.name + "</td>" +
+                    "<td>" + data.team_name + "</td>" +
+                    "<td>" + data.number + "</td>" +
+                    "<td>" + data.player_name + "</td>" +
+                    "<td>" + data.minutes + "</td>" +
+                    "<td>" + data.starter + "</td>" +
                     "<td>" + data.goals + "</td>" +
                     "<td>" + data.assists + "</td>" +
                     "<td>" + data.points + "</td>" +
@@ -902,9 +951,12 @@
                     "<td>" + data.saved + "</td>" +
                     "<td>" + data.save_percentage + "</td>" +
 
-                    "<td>Right now</td><td><button class='show-modal btn btn-success' " +
+                    "<td>Right now</td><td><button class='edit-modal btn btn-info' " +
                     "data-id='" + data.id +
-                    "' data-name='" + data.name +
+                    "' data-player_id='" + data.player_id +
+                    "' data-number='" + data.number +
+                    "' data-minutes='" + data.minutes +
+                    "' data-starter='" + data.starter +
                     "' data-goals='" + data.goals +
                     "' data-assists='" + data.assists +
                     "' data-shots='" + data.shots +
@@ -918,8 +970,7 @@
                     "' data-lose='" + data.lose +
                     "' data-allowed='" + data.allowed +
                     "' data-saved='" + data.saved +
-
-                    "' data-content='" + data.content + "'><span class='glyphicon glyphicon-eye-open'></span> Show</button> <button class='edit-modal btn btn-info' data-id='" + data.id + "' data-name='" + data.name + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-edit'></span> Edit</button> <button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-name='" + data.name + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-trash'></span> Delete</button></td></tr>");
+                    "'><span class='glyphicon glyphicon-edit'></span></button> <button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-name='" + data.name + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
 
                     if (data.is_published) {
                         $('.edit_published').prop('checked', true);
@@ -968,7 +1019,7 @@
             type: 'DELETE',
             url: 'gamerecords/' + id,
             data: {
-                '_token': $('input[name=_token]').val(),
+                '_token': $('input[name=_token]').val()
             },
             success: function(data) {
                 toastr.success('Successfully deleted Team!', 'Success Alert', {timeOut: 5000});
