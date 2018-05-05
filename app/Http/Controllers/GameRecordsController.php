@@ -87,6 +87,8 @@ class GameRecordsController extends Controller
             }
         }
 
+        $admin = false;
+
         if($user = Auth::user())
         {
             if($user->id == 1){
