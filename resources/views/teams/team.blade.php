@@ -237,7 +237,6 @@
     <table class="table table-striped table-bordered table-hover" id="scheduleTable">
         <thead>
         <tr>
-            <th valign="middle">#</th>
             <th>Date</th>
             <th>Game</th>
             <th>Home</th>
@@ -250,7 +249,6 @@
         <tbody>
         @foreach($gamelogs as $indexKey => $gamelog)
             <tr class="item{{$gamelog->id}} @if($gamelog->is_published) warning @endif">
-                <td class="col1">{{ $indexKey+1 }}</td>
                 <td>
                     {{  \Carbon\Carbon::parse( $gamelog->date_played )->format('D M d, Y') }}
                 </td>
@@ -288,7 +286,6 @@
     <table class="table table-striped table-bordered table-hover" id="scheduleTable">
         <thead>
         <tr>
-            <th valign="middle">#</th>
             <th>Number</th>
             <th>Name</th>
             <th>Position</th>
@@ -298,7 +295,6 @@
         <tbody>
         @foreach($players as $indexKey => $player)
             <tr class="item{{$player->id}}">
-                <td class="col1">{{ $indexKey+1 }}</td>
                 <td>
                    {{ $player->number }}
                 </td>
@@ -574,6 +570,8 @@
 
 <!-- AJAX CRUD operations -->
 <script type="text/javascript">
+
+
     // add a new post
     $(document).on('click', '.add-modal', function() {
         $('.modal-title').text('Add');

@@ -69,8 +69,8 @@
             <ul class="nav navbar-nav navbar-right">
                 <!-- Authentication Links -->
                 @if (Auth::guest())
-                    <li><a href="{{ url('/login') }}">Login</a></li>
-                    <li><a href="{{ url('/register') }}">Register</a></li>
+                    {{--<li><a href="{{ url('/login') }}">Login</a></li>--}}
+                    {{--<li><a href="{{ url('/register') }}">Register</a></li>--}}
                 @else
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -113,7 +113,6 @@
                     <table class="table table-striped table-bordered table-hover" id="postTable" style="visibility: hidden;">
                         <thead>
                             <tr>
-                                <th valign="middle">#</th>
                                 <th>Name</th>
                                 @if($admin)
                                     <th>Last updated</th>
@@ -125,7 +124,6 @@
                         <tbody>
                             @foreach($games as $indexKey => $game)
                                 <tr class="item{{$game->id}} @if($game->is_published) warning @endif">
-                                    <td class="col1">{{ $indexKey+1 }}</td>
                                     <td>{{$game->name}}</td>
                                     @if($admin)
                                         <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $game->updated_at)->diffForHumans() }}</td>

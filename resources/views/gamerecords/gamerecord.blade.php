@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,6 +17,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
     {{-- <link rel="styleeheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> --}}
 
     <!-- icheck checkboxes -->
@@ -124,7 +125,6 @@
     <table class="table table-striped table-hover" id="postTable" style="visibility: hidden;">
         <thead>
         <tr>
-            <th class="end"></th>
             <th class="end">Team</th>
             <th>Player</th>
             <th></th>
@@ -154,7 +154,6 @@
             @endif
         </tr>
         <tr>
-            <th class="end">#</th>
             <th class="end">Name</th>
             <th>No</th>
             <th>Name</th>
@@ -188,7 +187,6 @@
         <tbody>
         @foreach($gamerecords as $indexKey => $gamerecord)
             <tr class="item{{$gamerecord->id}} @if($gamerecord->is_published) warning @endif">
-                <td class="col1">{{ $indexKey+1 }}</td>
                 <td><a href="{{ URL('team')."/".$gamerecord->team_id }}">{{ \App\Team::findOrFail( $gamerecord->team_id )->name }}</a></td>
                 <td>{{ \App\Player::findOrFail( $gamerecord->player_id )->number }}</td>
                 <td><a href="{{ URL('player')."/".$gamerecord->player_id }}">{{ \App\Player::findOrFail( $gamerecord->player_id )->name }}</a></td>
@@ -631,6 +629,7 @@
         </div>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <!-- jQuery -->
 {{-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script> --}}
@@ -652,9 +651,16 @@
         $('#postTable').removeAttr('style');
     })
 </script>
+<script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 
 <script>
+
+
     $(document).ready(function(){
+
+        $('.table').DataTable();
+
+
         $('.published').iCheck({
             checkboxClass: 'icheckbox_square-yellow',
             radioClass: 'iradio_square-yellow',

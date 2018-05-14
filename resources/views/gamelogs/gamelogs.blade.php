@@ -70,8 +70,8 @@
             <ul class="nav navbar-nav navbar-right">
                 <!-- Authentication Links -->
                 @if (Auth::guest())
-                    <li><a href="{{ url('/login') }}">Login</a></li>
-                    <li><a href="{{ url('/register') }}">Register</a></li>
+                    {{--<li><a href="{{ url('/login') }}">Login</a></li>--}}
+                    {{--<li><a href="{{ url('/register') }}">Register</a></li>--}}
                 @else
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -118,7 +118,6 @@
                     <table class="table table-striped table-bordered table-hover" id="postTable" style="visibility: hidden;">
                         <thead>
                             <tr>
-                                <th valign="middle">#</th>
                                 <th>Date</th>
                                 <th>Game</th>
                                 <th>Home</th>
@@ -135,7 +134,6 @@
                         <tbody>
                             @foreach($gamelogs as $indexKey => $gamelog)
                                 <tr class="item{{$gamelog->id}} @if($gamelog->is_published) warning @endif">
-                                    <td class="col1">{{ $indexKey+1 }}</td>
                                     <td>
                                         {{  \Carbon\Carbon::parse( $gamelog->date_played )->format('D M d, Y') }}
                                     </td>

@@ -76,8 +76,8 @@
             <ul class="nav navbar-nav navbar-right">
                 <!-- Authentication Links -->
                 @if (Auth::guest())
-                    <li><a href="{{ url('/login') }}">Login</a></li>
-                    <li><a href="{{ url('/register') }}">Register</a></li>
+                    {{--<li><a href="{{ url('/login') }}">Login</a></li>--}}
+                    {{--<li><a href="{{ url('/register') }}">Register</a></li>--}}
                 @else
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -126,7 +126,6 @@
     <table class="table table-striped table-hover" id="postTable" style="visibility: hidden;">
         <thead>
         <tr>
-            <th class="end"></th>
             <th class="end">Team</th>
             <th>Player</th>
             <th></th>
@@ -156,7 +155,6 @@
             @endif
         </tr>
         <tr>
-            <th class="end">#</th>
             <th class="end">Name</th>
             <th>No</th>
             <th>Name</th>
@@ -190,7 +188,6 @@
         <tbody>
         @foreach($gamerecords as $indexKey => $gamerecord)
             <tr class="item{{$gamerecord->id}} @if($gamerecord->is_published) warning @endif">
-                <td class="col1">{{ $indexKey+1 }}</td>
                 <td><a href="{{ URL('team')."/".$gamerecord->team_id }}">{{ \App\Team::findOrFail( $gamerecord->team_id )->name }}</a></td>
                 <td>{{ \App\Player::findOrFail( $gamerecord->player_id )->number }}</td>
                 <td><a href="{{ URL('player')."/".$gamerecord->player_id }}">{{ \App\Player::findOrFail( $gamerecord->player_id )->name }}</a></td>

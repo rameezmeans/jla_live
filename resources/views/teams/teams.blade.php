@@ -119,7 +119,6 @@
                     <table class="table table-striped table-hover" id="postTable" style="visibility: hidden;">
                         <thead>
                         <tr>
-                            <th class="end"></th>
                             <th class="end">Team</th>
 
                             @if($admin)
@@ -128,7 +127,6 @@
                             @endif
                             </tr>
                         <tr>
-                            <th class="end">#</th>
                             <th class="end">Name</th>
 
                                 @if($admin)
@@ -141,7 +139,6 @@
                         <tbody>
                             @foreach($teams as $indexKey => $team)
                                 <tr class="item{{$team->id}} @if($team->is_published) warning @endif">
-                                    <td class="col1">{{ $indexKey+1 }}</td>
                                     <td><a href="{{ URL('').'/team/'.$team->id }}">{{$team->name}}</a></td>
 
                                     @if($admin)

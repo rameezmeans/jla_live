@@ -74,8 +74,8 @@
             <ul class="nav navbar-nav navbar-right">
                 <!-- Authentication Links -->
                 @if (Auth::guest())
-                    <li><a href="{{ url('/login') }}">Login</a></li>
-                    <li><a href="{{ url('/register') }}">Register</a></li>
+                    {{--<li><a href="{{ url('/login') }}">Login</a></li>--}}
+                    {{--<li><a href="{{ url('/register') }}">Register</a></li>--}}
                 @else
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -121,7 +121,6 @@
         <thead>
 
         <tr>
-            <th class="end">#</th>
             <th>Name</th>
             <th>Team</th>
             <th>position</th>
@@ -136,7 +135,6 @@
         <tbody>
         @foreach($players as $indexKey => $player)
             <tr class="item{{$player->id}} @if($player->is_published) warning @endif">
-                <td class="col1">{{ $indexKey+1 }}</td>
                 <td><a href="{{ URL('').'/player/'.$player->id }}">{{$player->name}}</a></td>
                 <td><a href="{{ URL('').'/team/'.$player->team_id }}">{{ \App\Team::findOrFail($player->team_id)->name}}</a></td>
                 <td>{{$player->position}}</td>
